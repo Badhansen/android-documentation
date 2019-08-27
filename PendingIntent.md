@@ -31,6 +31,8 @@ StackOverflow answer
 3. The limitation is overcome using PendingIntent. With PendingIntent the receiving application, needn't have 
    android.permission.BLUETOOTH_ADMIN for enabling Bluetooth.
    A beautiful ilstration is on the link. [PendingIntent](http://android-pending-intent.blogspot.com/). **LOOK**
+
+4. For Service Foreground and Background interchanging. 
    
 # Difference Between Intent and PendingIntent
 
