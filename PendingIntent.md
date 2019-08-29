@@ -124,29 +124,36 @@ TAXI ANALOGY
 
 Intents are typically used for starting Services. For example:
 
-> Intent intent = new Intent(CurrentClass.this, ServiceClass.class);
-  startService(intent);
- 
+```java
+Intent intent = new Intent(CurrentClass.this, ServiceClass.class);
+startService(intent);
+``` 
+
 This is like when you call for a taxi:
 
-> Myself = CurrentClass
- Taxi Driver = ServiceClass
- 
+```java
+Myself = CurrentClass
+Taxi Driver = ServiceClass
+``` 
+
 **PendingIntent**
 
 You will need to use something like this:
 
-> Intent intent = new Intent(CurrentClass.this, ServiceClass.class);
-  PendingIntent pi = PendingIntent.getService(parameter, parameter, intent, parameter);
-  getDataFromThirdParty(parameter, parameter, pi, parameter);
-  
+```java
+Intent intent = new Intent(CurrentClass.this, ServiceClass.class);
+PendingIntent pi = PendingIntent.getService(parameter, parameter, intent, parameter);
+getDataFromThirdParty(parameter, parameter, pi, parameter);
+```
+
 Now this Third party will start the service acting on your behalf. A real life analogy is Uber or Lyft who are both taxi companies.
 
 You send a request for a ride to Uber/Lyft. They will then go ahead and call one of their drivers on your behalf.
 
 Therefore:
 
+```
 Uber/Lyft ------ ThirdParty which receives PendingIntent
 Myself --------- Class calling PendingIntent
 Taxi Driver ---- ServiceClass
-
+```
