@@ -30,7 +30,89 @@ StackOverflow answer
 
 3. The limitation is overcome using PendingIntent. With PendingIntent the receiving application, needn't have 
    android.permission.BLUETOOTH_ADMIN for enabling Bluetooth.
-   A beautiful ilstration is on the link. [PendingIntent](http://android-pending-intent.blogspot.com/). **LOOK**
+   A beautiful ilstration is on the link. [PendingIntent](http://android-pending-intent.blogspot.com/).
+  
+ ```java
+ // Program source: http://android-pending-intent.blogspot.com/
+public class IParcel implements Parcelable
+{
+
+    PendingIntent pIntent = null;
+   
+    public IParcel(PendingIntent pi)
+    {
+        pIntent = pi;
+    }
+   
+    public IParcel(Parcel in)
+    {
+        pIntent = (PendingIntent)in.readValue(null);
+    }
+   
+    public static Parcelable.Creator<IParcel> CREATOR = new Parcelable.Creator<IParcel>(){
+
+        @Override
+        public IParcel createFromParcel(Parcel source) {
+            // TODO Auto-generated method stub
+            return new IParcel(source);
+        }
+
+        @Override
+        public IParcel[] newArray(int size) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+       
+    };
+  
+    @Override
+    public int describeContents() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        // TODO Auto-generated method stub
+        dest.writeValue(pIntent);
+       
+    }
+   
+}
+
+public class FirstApp extends Activity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        // TODO Auto-generated method stub
+        super.onCreate(savedInstanceState);
+    
+        Intent myIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+        PendingIntent pIntent = PendingIntent.getActivity(this, 0, myIntent,PendingIntent.FLAG_ONE_SHOT);//FLAG_ONE_SHOT - only once pIntent can use the myIntent
+     
+        IParcel ip = new IParcel(pIntent);
+    
+        Intent sndApp = new Intent();
+        sndApp.setComponent(new ComponentName("com.myapp", "com.myapp.SecondApp"));
+        sndApp.putExtra("obj",ip);
+        startActivity(sndApp);
+        }
+
+}
+
+public class SecondApp extends Activity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        // TODO Auto-generated method stub
+        super.onCreate(savedInstanceState);
+
+       IParcel pc = getIntent().getExtras().getParcelable("obj");
+       if(pc != null){
+               pc.pIntent.send(); // this will launch the bluetooth enabling activity
+       }
+}
+ ```
 
 4. For Service Foreground and Background interchanging. 
    
